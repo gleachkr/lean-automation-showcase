@@ -13,7 +13,8 @@ open Real
 SLIDE 
 
 
-/- Fun with lean automation -/
+Fun with lean automation
+========================
 
 
 FIN 
@@ -45,7 +46,7 @@ You've got ADTs:
 
 inductive Workday  /- VS: "data Workdays = " -/
 | Monday
-| Tueday
+| Tuesday
 | Wednesday
 | Thursday
 | Friday
@@ -116,13 +117,31 @@ def hello_world := do
 
 /- SLIDE -/
 
-/- But the there's a crazy thing you can do -/
+
+/- Lean also has *dependent types* -/
+
+inductive Vec : Nat → Type
+| nil : Vec 0
+| cons : Nat → Vec n → Vec (.succ n)
+
+#check Vec.nil
+
+#check Vec.cons 1 Vec.nil
+
+def nvec : (n : Nat) → Vec n 
+| 0 => Vec.nil
+| n + 1 => Vec.cons 0 (nvec n)
+
+/- And with dependent types, there's a crazy thing you can do -/
+
+/- SLIDE -/
 
 def kants_constant : myPlus 5 7 = myPlusAlt 5 7 := Eq.refl 12
 
 /- SLIDE -/
 
 /- in other words -/
+
 
 theorem kants_theorem : myPlus 5 7 = myPlusAlt 5 7 := Eq.refl 12
 
@@ -132,9 +151,9 @@ theorem kants_theorem : myPlus 5 7 = myPlusAlt 5 7 := Eq.refl 12
 
 theorem plus_equiv : (x y : Nat) → myPlus x y = myPlusAlt x y 
 |     0,     0 => Eq.refl 0
-| x + 1,     0 => by
+| z + 1,     0 => by
   unfold myPlus
-  rw [plus_equiv x 0]
+  rw [plus_equiv z 0]
   rfl
 |     0, y + 1 => by 
   unfold myPlusAlt
@@ -145,6 +164,9 @@ theorem plus_equiv : (x y : Nat) → myPlus x y = myPlusAlt x y
   rw [plus_equiv x (y + 1), ←plus_equiv (x + 1) y] 
   unfold myPlus myPlusAlt
   rw [plus_equiv x y] 
+
+
+theorem plus_equiv' : ∀(x y : Nat), myPlus x y = myPlusAlt x y := plus_equiv
 
 /- SLIDE -/
 
@@ -282,10 +304,6 @@ example : DecidableEq α → (∃x y : α, x ≠ y) → ∀f : α → (α → α
 /- SLIDE -/
 
 /- Interestingly, canonical can also be used for program synthesis -/
-
-inductive Vec : Nat → Type
-| nil : Vec 0
-| cons : Nat → Vec n → Vec (n + 1)
 
 def append : Vec n → Vec m → Vec (n + m) := by 
   canonical
