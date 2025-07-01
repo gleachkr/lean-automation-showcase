@@ -230,6 +230,8 @@ theorem know_by_cases' (a b : Nat) : (a = b + 1 ∨ b = a + 1) → (a > b ∨ b 
 
 theorem know_by_cases'' (a b : Nat) : (a = b + 1 ∨ b = a + 1) → (a ≠ b) := by aesop?
 
+/- It's limited when it comes to constructing new terms though -/
+
 theorem something_bigger (a : Nat) : ∃b, b > a := by aesop
 
 /- SLIDE -/
@@ -254,6 +256,8 @@ theorem Grelling's_paradox : ∀Denotes: α → α → Prop, ¬∃y, ∀x, ¬Den
 /- set_option trace.duper.printProof true in -/
 theorem Prior's_paradox : ∀T : Prop → Prop, T (∀p, T p → ¬ p) → (∃p, T p ∧ ¬p) ∧ (∃p, T p ∧ p) := by duper
 
+/- It's best at logical goals. Not so good at constructing witnesses. -/
+
 theorem something_bigger' (a : Nat) : ∃b, b > a := by duper
 
 /- SLIDE -/
@@ -268,6 +272,8 @@ theorem something_bigger' (a : Nat) : ∃b, b > a := by duper
 
 * aspires to *completeness* for dependent type theory - it's in fact a rust
   program, in principle separable from lean.
+
+quite good at finding witnesses
 
 -/
 
@@ -294,7 +300,7 @@ example : DecidableEq α → (∃x y : α, x ≠ y) → ∀f : α → (α → α
 
 /- SLIDE -/
 
-/- But canonical is not strictly better than duper -/
+/- But canonical is not strictly better than duper. The examples below time out -/
 
 /- example : ∀Denotes : α → α → Prop, ¬∃y, ∀x, Denotes x x ↔ ¬Denotes y y := 
   by canonical -/
@@ -303,7 +309,13 @@ example : DecidableEq α → (∃x y : α, x ≠ y) → ∀f : α → (α → α
 
 /- SLIDE -/
 
-/- Interestingly, canonical can also be used for program synthesis -/
+/- 
+
+Interestingly, canonical can also be used for program synthesis. Use an LSP
+code action to replace the canonical invocation with the witnessing term it
+found 
+
+-/
 
 def append : Vec n → Vec m → Vec (n + m) := by 
   canonical
@@ -315,6 +327,9 @@ def append : Vec n → Vec m → Vec (n + m) := by
 inductive PolyVec (α : Type) : Nat → Type
 | nil : PolyVec α 0
 | cons : α → PolyVec α n → PolyVec α (n + 1)
+
+/- Program syntesis is most interesting when dealing with polymorphic types which -/
+/- might have only one inhabitant, the one you'd naturally think of -/
 
 def PolyAppend : PolyVec α n → PolyVec α m → PolyVec α (n + m) := by 
   canonical
