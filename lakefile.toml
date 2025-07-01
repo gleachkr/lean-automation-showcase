@@ -1,0 +1,35 @@
+name = "lean-automation-showcase"
+version = "0.1.0"
+defaultTargets = ["lean-automation-showcase"]
+
+[[lean_lib]]
+name = "LeanAutomationShowcase"
+
+[[require]]
+name = "Duper"
+git = "https://github.com/leanprover-community/duper.git"
+rev = "v0.0.26"
+
+[[require]]
+name = "aesop"
+git = "https://github.com/leanprover-community/aesop"
+rev = "9264d54"
+
+[[require]]
+name = "Canonical"
+scope = "chasenorman"
+rev = "26048ed"
+
+ [[require]]
+name = "smt"
+scope = "ufmg-smite"
+rev = "db6a7ca"
+
+[[require]]
+name = "Hammer"
+git = "https://github.com/JOSHCLUNE/LeanHammer"
+rev = "fab5ec9"
+
+[[lean_exe]]
+name = "lean-automation-showcase"
+root = "Main"

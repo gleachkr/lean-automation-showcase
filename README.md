@@ -1,0 +1,1 @@
+# lean-automation-showcase
